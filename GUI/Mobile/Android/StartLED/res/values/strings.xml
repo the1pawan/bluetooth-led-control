@@ -8,5 +8,13 @@
     <string name="mode2">Mode2</string>
     <string name="mode3">mode3</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="connected">Connected</string>
+    <string name="red">Red</string>
+    <string name="green">Green</string>
+    <string name="blue">Blue</string>
+    <string name="delay">Delay</string>
+    <string name="bluevalue">bluevalue</string>
+    <string name="greenvalue">greenvalue</string>
+    <string name="delayvalue">delayvalue</string>
 
 </resources>
