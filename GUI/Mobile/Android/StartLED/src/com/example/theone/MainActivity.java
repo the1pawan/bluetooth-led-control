@@ -81,8 +81,9 @@ public class MainActivity extends Activity {
 				//Android tab
 				//m_Cannon = BluetoothAdapter.getDefaultAdapter().getRemoteDevice("A0:75:91:53:6F:2F");
 				//Murali PC
-				m_Cannon = BluetoothAdapter.getDefaultAdapter().getRemoteDevice("00:15:83:15:A3:10");
-		        
+				//m_Cannon = BluetoothAdapter.getDefaultAdapter().getRemoteDevice("00:15:83:15:A3:10");
+		        //new hardware
+				m_Cannon = BluetoothAdapter.getDefaultAdapter().getRemoteDevice("02:11:07:08:00:19");
 		        connect();
 				
 			}
@@ -93,32 +94,21 @@ public class MainActivity extends Activity {
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
 				// TODO Auto-generated method stub
 				if (checkedId==R.id.radioMode0) {
-					seekbarred.setVisibility(View.GONE);
-			        seekbarblue.setVisibility(View.GONE);
-			        seekbargreen.setVisibility(View.GONE);
-			        valueRed.setText(" value is 0");
-			        valueBlue.setText(" value is 0");
-			        valueGreen.setText(" value is 0");
+			        resetRGB();
 					Toast.makeText(MainActivity.this,"Mode0", Toast.LENGTH_SHORT).show();
 					fire(1);
+					
+//					send("m0");
 				}
 				else if (checkedId==R.id.radioMode1) {
-					seekbarred.setVisibility(View.GONE);
-			        seekbarblue.setVisibility(View.GONE);
-			        seekbargreen.setVisibility(View.GONE);
-			        valueRed.setText(" value is 0");
-			        valueBlue.setText(" value is 0");
-			        valueGreen.setText(" value is 0");
+					resetRGB();
 					Toast.makeText(MainActivity.this,"Mode1", Toast.LENGTH_SHORT).show();
+					fire(1);
 				} 
 				else if (checkedId==R.id.radioMode2) {
-					seekbarred.setVisibility(View.GONE);
-			        seekbarblue.setVisibility(View.GONE);
-			        seekbargreen.setVisibility(View.GONE);
-			        valueRed.setText(" value is 0");
-			        valueBlue.setText(" value is 0");
-			        valueGreen.setText(" value is 0");
+					resetRGB();
 					Toast.makeText(MainActivity.this,"Mode2", Toast.LENGTH_SHORT).show();
+					fire(1);
 				}
 				else if (checkedId==R.id.radioMode3) {
 					Toast.makeText(MainActivity.this,"Mode3", Toast.LENGTH_SHORT).show();
@@ -127,7 +117,19 @@ public class MainActivity extends Activity {
 			        seekbargreen.setVisibility(View.VISIBLE);
 				}
 			}
+
+			private void resetRGB() {
+				// TODO Auto-generated method stub
+				seekbarred.setVisibility(View.GONE);
+		        seekbarblue.setVisibility(View.GONE);
+		        seekbargreen.setVisibility(View.GONE);
+		        valueRed.setText(" value is 0");
+		        valueBlue.setText(" value is 0");
+		        valueGreen.setText(" value is 0");
+			}
 		});
+    	
+    	
     	
     	 seekbarred = (SeekBar) findViewById(R.id.seekBarRed);
     	 valueRed=(TextView) findViewById(R.id.textViewRedvalue);
@@ -300,9 +302,11 @@ public class MainActivity extends Activity {
         	m_FireTask.execute(barrel);
     }
     
+    
     private class FireTask extends AsyncTask<Integer,String,Void> {
 		protected Void doInBackground(Integer...args) {
 			Log.d(TAG,"FireTask started for barrel " + args[0]);
+			
 			
 	        try
 	        {	        	
@@ -315,8 +319,8 @@ public class MainActivity extends Activity {
 			    Log.d(TAG, "Bluetooth is connected!");
 			        
 			    m_Output = m_BtSocket.getOutputStream();
-			    char cmd = 'm';
-			    m_Output.write(cmd);
+			    String cmd = "m0";
+			    m_Output.write(cmd.getBytes());
 			    Log.d(TAG,"BT write successful. CMD=" + cmd);
 			    return null;
 	        }
@@ -327,7 +331,7 @@ public class MainActivity extends Activity {
 	        	Log.d(TAG,"Returning to unconnected state");
 	        	m_isConnected = false;
 	        	checkButtons();
-	        	return null;
+	        	return null;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
 	        }			
 		}
 		
@@ -339,6 +343,25 @@ public class MainActivity extends Activity {
 			Log.d(TAG,"FireTask finished");
 		}
 	}
+    
+    @Override
+    public void onDestroy() 
+	{
+        try 
+        {
+            if (m_BtSocket != null)
+            {
+            	m_BtSocket.close();
+            }
+        } 
+        catch (Exception e)
+        {
+            Toast.makeText(this, "An error encountered while closing the socket.", Toast.LENGTH_LONG).show();
+            Log.e(TAG, e.toString());
+        }
+        super.onDestroy();
+    }
+    
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
