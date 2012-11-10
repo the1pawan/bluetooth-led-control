@@ -1,12 +1,13 @@
-package com.example.theone;
+package com.example.theone;                                                                         
 
-import java.io.OutputStream;
+import java.io.OutputStream;                                                                                                                                                                                                                                                   
 import java.lang.reflect.Method;
 
+import android.R.string;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Activity;
+import android.app.Activity;                
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -26,7 +27,7 @@ import android.widget.Toast;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
 public class MainActivity extends Activity {
-
+                 
 	Button button;
 	
 	private static final String TAG = MainActivity.class.getCanonicalName();
@@ -45,7 +46,14 @@ public class MainActivity extends Activity {
     private BluetoothSocket m_BtSocket;
     private OutputStream 	m_Output;
    
-
+    public int barrelcheck;
+    
+    private String redvaluesent;
+    private String bluevaluesent;
+    private String greenvaluesent;
+    private String delayvaluesent;
+    
+    
     private FireTask		m_FireTask;
 	SeekBar seekbarred;
 	SeekBar seekbargreen;
@@ -83,9 +91,10 @@ public class MainActivity extends Activity {
 				//Murali PC
 				//m_Cannon = BluetoothAdapter.getDefaultAdapter().getRemoteDevice("00:15:83:15:A3:10");
 		        //new hardware
-				m_Cannon = BluetoothAdapter.getDefaultAdapter().getRemoteDevice("02:11:07:08:00:19");
-		        connect();
+				//m_Cannon = BluetoothAdapter.getDefaultAdapter().getRemoteDevice("02:11:07:08:00:19");
 				
+				//m_Cannon = BluetoothAdapter.getDefaultAdapter().getRemoteDevice("80:60:07:08:00:19");
+		        //connect();
 			}
 		});
     	
@@ -96,22 +105,27 @@ public class MainActivity extends Activity {
 				if (checkedId==R.id.radioMode0) {
 			        resetRGB();
 					Toast.makeText(MainActivity.this,"Mode0", Toast.LENGTH_SHORT).show();
-					fire(1);
+					barrelcheck=1;
+					fire(barrelcheck);
 					
 //					send("m0");
 				}
 				else if (checkedId==R.id.radioMode1) {
 					resetRGB();
 					Toast.makeText(MainActivity.this,"Mode1", Toast.LENGTH_SHORT).show();
-					fire(1);
+					barrelcheck=2;
+					fire(barrelcheck);
 				} 
 				else if (checkedId==R.id.radioMode2) {
 					resetRGB();
 					Toast.makeText(MainActivity.this,"Mode2", Toast.LENGTH_SHORT).show();
-					fire(1);
+					barrelcheck=3;
+					fire(barrelcheck);
 				}
 				else if (checkedId==R.id.radioMode3) {
 					Toast.makeText(MainActivity.this,"Mode3", Toast.LENGTH_SHORT).show();
+					barrelcheck=4;
+					fire(barrelcheck);
 					seekbarred.setVisibility(View.VISIBLE);
 			        seekbarblue.setVisibility(View.VISIBLE);
 			        seekbargreen.setVisibility(View.VISIBLE);
@@ -137,7 +151,8 @@ public class MainActivity extends Activity {
     	 
 			public void onStopTrackingTouch(SeekBar seekBar) {
 				// TODO Auto-generated method stub
-				
+				barrelcheck=5;
+				fire(barrelcheck);
 			}
 			
 			public void onStartTrackingTouch(SeekBar seekBar) {
@@ -149,6 +164,7 @@ public class MainActivity extends Activity {
 					boolean fromUser) {
 				// TODO Auto-generated method stub
 				valueRed.setText(" value is "+progress);
+				redvaluesent=new Integer(progress).toString();
 			}
 		});
     	 
@@ -158,7 +174,8 @@ public class MainActivity extends Activity {
 			
 			public void onStopTrackingTouch(SeekBar seekBar) {
 				// TODO Auto-generated method stub
-				
+				barrelcheck=6;
+				fire(barrelcheck);
 			}
 			
 			public void onStartTrackingTouch(SeekBar seekBar) {
@@ -170,6 +187,7 @@ public class MainActivity extends Activity {
 					boolean fromUser) {
 				// TODO Auto-generated method stub
 				valueGreen.setText(" value is "+progress);
+				greenvaluesent=new Integer(progress).toString();
 			}
 		});
     	 
@@ -179,7 +197,8 @@ public class MainActivity extends Activity {
 			
 			public void onStopTrackingTouch(SeekBar seekBar) {
 				// TODO Auto-generated method stub
-				
+				barrelcheck=7;
+				fire(barrelcheck);
 			}
 			
 			public void onStartTrackingTouch(SeekBar seekBar) {
@@ -191,6 +210,7 @@ public class MainActivity extends Activity {
 					boolean fromUser) {
 				// TODO Auto-generated method stub
 				valueBlue.setText(" value is "+progress);
+				bluevaluesent=new Integer(progress).toString();
 			}
 		});
     	 
@@ -200,7 +220,8 @@ public class MainActivity extends Activity {
 			
 			public void onStopTrackingTouch(SeekBar seekBar) {
 				// TODO Auto-generated method stub
-				
+				barrelcheck=8;
+				fire(barrelcheck);
 			}
 			
 			public void onStartTrackingTouch(SeekBar seekBar) {
@@ -212,6 +233,7 @@ public class MainActivity extends Activity {
 					boolean fromUser) {
 				// TODO Auto-generated method stub
 				valueDelay.setText(" value is "+progress);
+				delayvaluesent=new Integer(progress).toString();
 			}
 		});
     }
@@ -319,7 +341,34 @@ public class MainActivity extends Activity {
 			    Log.d(TAG, "Bluetooth is connected!");
 			        
 			    m_Output = m_BtSocket.getOutputStream();
-			    String cmd = "m0";
+			    String cmd="0";
+			    if(barrelcheck==1)
+			    {
+			     cmd = "m0";
+			    }
+			    else if (barrelcheck==2) {
+			    	 
+			    	cmd = "m1";
+				}
+			    else if (barrelcheck==3) {
+			    	  cmd = "m2";
+				}
+			    else if (barrelcheck==4) {
+			    	 
+			    	cmd = "m3";
+				}
+			    else if (barrelcheck==5) {
+			    	cmd ="r"+redvaluesent;
+				}
+			    else if (barrelcheck==6) {
+			    	cmd = "g"+greenvaluesent;
+				}
+			    else if (barrelcheck==7) {
+			    	cmd = "b"+bluevaluesent;
+				}
+			    else if (barrelcheck==8) {
+			    	cmd = "d"+delayvaluesent;
+				}
 			    m_Output.write(cmd.getBytes());
 			    Log.d(TAG,"BT write successful. CMD=" + cmd);
 			    return null;

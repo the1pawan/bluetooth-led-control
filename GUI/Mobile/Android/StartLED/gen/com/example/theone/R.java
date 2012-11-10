@@ -57,6 +57,7 @@ public final class R {
         public static final int mode2=0x7f040005;
         public static final int mode3=0x7f040006;
         public static final int red=0x7f040009;
+        public static final int redvalue=0x7f040010;
         public static final int title_activity_main=0x7f040007;
     }
     public static final class style {

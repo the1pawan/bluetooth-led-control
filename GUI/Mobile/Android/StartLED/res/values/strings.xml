@@ -16,5 +16,6 @@
     <string name="bluevalue">bluevalue</string>
     <string name="greenvalue">greenvalue</string>
     <string name="delayvalue">delayvalue</string>
+    <string name="redvalue">redvalue</string>
 
 </resources>
